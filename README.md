@@ -31,9 +31,3 @@ $tufftufftime->getDeparting();
 $tufftufftime->getArriving();
 $tufftufftime->getStationName("Bg");
 ```
-
-## Todo
-* Make WordPress-plugin.
-* Move API-key input somewhere else (will probably be in WP plugin settingspage).
-* Get timetable for a train (based on train id).
-* Get a stations messages - delays, cancellations, etc. 
