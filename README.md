@@ -4,7 +4,7 @@ A WordPress widget that shows the current and future trainstops at a station. Yo
 TuffTuffTime is tested on `PHP 5.5.14` and requires `cURL`. Released under the [MIT license](LICENSE).
 
 ## Requirements
-* You need to generate a API-key from [Trafiklab](http://www.trafiklab.se/) and
+* You need to generate a API-key from [Trafiklab](http://www.trafiklab.se/api/trafikverket-oppet-api) and
 input it into `Settings.php` (rename `Settings-sample.php`).
 
 ## Usage of class
