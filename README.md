@@ -12,6 +12,7 @@ create a `Settings.php` file that contains:
   class Settings {
     public static $apiKey = "XXX";
   }
+?>
 ```
 
 
