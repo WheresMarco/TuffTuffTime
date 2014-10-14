@@ -1,13 +1,12 @@
 <?php
   namespace TuffTuffTime;
 
+  require_once("Settings.php");
+
   class TuffTuffTime {
     private $stationID;
     private $when;
-    private static $apiURL = "http://api.tagtider.net/v1/";
-    private static $apiIdentifier = "TuffTuffTime";
-    private static $apiUser = "tagtider";
-    private static $apiPassword = "codemocracy";
+    private static $apiURL = "http://api.trafikinfo.trafikverket.se/v1/data.json";
 
     public function __construct($station, $when = "today") {
       $this->stationID = $this->getStationID($station);
@@ -15,64 +14,52 @@
     }
 
     public function getDeparting() {
-      // Setup request
-      $options = array(
-          CURLOPT_FRESH_CONNECT   => 1,
-          CURLOPT_URL             => self::$apiURL . "/stations/" . $this->stationID . "/transfers/departures.json",
-          CURLOPT_USERAGENT       => self::$apiIdentifier,
-          CURLOPT_HTTPAUTH        => CURLAUTH_DIGEST,
-          CURLOPT_USERPWD         => self::$apiUser . ":" . self::$apiPassword,
-          CURLOPT_RETURNTRANSFER  => 3,
-      );
-
-      // Handle and return
-      $session = curl_init();
-      curl_setopt_array($session, $options);
-      $response = curl_exec($session);
-      curl_close($session);
-
-      if(!$response)
-        throw new \Exception("Could not get departures");
-
-      $responseArray = json_decode($response, true);
-
-      var_dump($responseArray);
-
       return $this->stationID;
     }
 
     private function getStationID($name) {
-      // Setup request
       $options = array(
           CURLOPT_FRESH_CONNECT   => 1,
-          CURLOPT_URL             => self::$apiURL . "stations.json",
-          CURLOPT_USERAGENT       => self::$apiIdentifier,
-          CURLOPT_HTTPAUTH        => CURLAUTH_DIGEST,
-          CURLOPT_USERPWD         => self::$apiUser . ":" . self::$apiPassword,
+          CURLOPT_URL             => self::$apiURL,
           CURLOPT_RETURNTRANSFER  => 3,
+          CURLOPT_POST            => 1,
+          CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
       );
 
-      // Handle and return
+      $xml = "<REQUEST>" .
+                "<LOGIN authenticationkey='". \Settings::$apiKey ."' />" .
+                "<QUERY objecttype='TrainStation'>" .
+                  "<FILTER/>" .
+                  "<INCLUDE>AdvertisedLocationName</INCLUDE>" .
+                  "<INCLUDE>LocationSignature</INCLUDE>" .
+                "</QUERY>" .
+              "</REQUEST>";
+
+      // Open up curl session and fire of the request
       $session = curl_init();
       curl_setopt_array($session, $options);
+      curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
       $response = curl_exec($session);
       curl_close($session);
 
+      // Check if we got a response
       if(!$response)
-        throw new \Exception("Could not get stations.");
+        throw new \Exception("Could not get departures");
 
+      // Decode the response to json
       $responseArray = json_decode($response, true);
-      $foundID = 0;
+      $foundID = "";
 
-      // Loop through the returned array to find the id
-      foreach($responseArray['stations']['station'] as $station) {
+      // // Loop through the returned array to find the id
+      foreach($responseArray['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
         if (array_search($name, $station)) {
-          $foundID = $station['id'];
+          $foundID = $station['LocationSignature'];
         }
       }
 
-      if ($foundID === 0) {
-        throw new \Exception("Could not find ID in returned array.");
+      // No match? Throw a exception
+      if ($foundID === "") {
+        throw new \Exception("Could not find ID in returned array. Must be name exact name (ex. Stockholm C)");
       }
 
       return $foundID;
