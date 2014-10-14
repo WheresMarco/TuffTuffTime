@@ -1,7 +1,7 @@
 <?php
   namespace TuffTuffTime;
 
-  require_once("Settings.php");
+  require_once(TUFFTUFFTIME_PATH . "/Settings.php");
 
   class TuffTuffTime {
     private $stations;
