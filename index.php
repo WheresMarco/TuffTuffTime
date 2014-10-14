@@ -51,18 +51,25 @@
       $arriving = get_transient("tuffTuffTime_arriving");
 
       echo "<table><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th><th></th><th>Anmärkning</th></tr>";
-      foreach($arriving['RESPONSE']['RESULT'][0]['TrainAnnouncement'] as $arrivingItem) {
-        $time = strtotime($arrivingItem['AdvertisedTimeAtLocation']);
 
-        echo "<tr>";
-          echo "<td>". date("H:i", $time) . "</td>";
-          echo "<td>" . $arrivingItem['FromLocation'][0] . "</td>";
-          echo "<td>" . $arrivingItem['TrackAtLocation'] . "</td>";
-          echo "<td>" . $arrivingItem['AdvertisedTrainIdent'] . "</td>";
-          echo "<td>" . $arrivingItem['ProductInformation'][0] . "</td>";
-          //echo "<td>" . $arrivingItem['OtherInformation'][0] . "</td>";
-        echo "</tr>";
-      }
+        foreach($arriving['RESPONSE']['RESULT'][0]['TrainAnnouncement'] as $arrivingItem) {
+          $time = strtotime($arrivingItem['AdvertisedTimeAtLocation']);
+
+          // TODO Fix this
+          if($time <= strtotime("-15 minutes")) {
+            continue;
+          }
+
+          echo "<tr>";
+            echo "<td>". date("H:i", $time) . "</td>";
+            echo "<td>" . $arrivingItem['FromLocation'][0] . "</td>";
+            echo "<td>" . $arrivingItem['TrackAtLocation'] . "</td>";
+            echo "<td>" . $arrivingItem['AdvertisedTrainIdent'] . "</td>";
+            echo "<td>" . $arrivingItem['ProductInformation'][0] . "</td>";
+            //echo "<td>" . $arrivingItem['OtherInformation'][0] . "</td>";
+          echo "</tr>";
+        }
+
       echo "</table>";
   	}
 
