@@ -14,6 +14,11 @@
         CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
     );
 
+    /**
+      * Constructor
+      *
+      * @param string $station - the name of the station
+      */
     public function __construct($station) {
       $this->stations = $this->getStations();
       $this->stationID = $this->getStationID($station);
@@ -134,8 +139,9 @@
     }
 
     /**
-      * Get the stationID for a station. Pass in the name.
+      * Get the stationID for a station.
       *
+      * @param string $name - Name of the station
       * @return string
       */
     private function getStationID($name) {
