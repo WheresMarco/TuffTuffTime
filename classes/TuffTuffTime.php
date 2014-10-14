@@ -6,7 +6,13 @@
   class TuffTuffTime {
     private $stations;
     private $stationID;
-    private static $apiURL = "http://api.trafikinfo.trafikverket.se/v1/data.json";
+    private static $options = array(
+        CURLOPT_FRESH_CONNECT   => 1,
+        CURLOPT_URL             => "http://api.trafikinfo.trafikverket.se/v1/data.json",
+        CURLOPT_RETURNTRANSFER  => 3,
+        CURLOPT_POST            => 1,
+        CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
+    );
 
     public function __construct($station) {
       $this->stations = $this->getStations();
@@ -19,14 +25,6 @@
       * @return array
       */
     public function getArriving() {
-      $options = array(
-          CURLOPT_FRESH_CONNECT   => 1,
-          CURLOPT_URL             => self::$apiURL,
-          CURLOPT_RETURNTRANSFER  => 3,
-          CURLOPT_POST            => 1,
-          CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
-      );
-
       $xml = "<REQUEST>" .
               "<LOGIN authenticationkey='". \Settings::$apiKey ."' />" .
               "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
@@ -51,7 +49,7 @@
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array($session, $options);
+      curl_setopt_array($session, self::$options);
       curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
       $response = curl_exec($session);
       curl_close($session);
@@ -69,14 +67,6 @@
       * @return array
       */
     public function getDeparting() {
-      $options = array(
-          CURLOPT_FRESH_CONNECT   => 1,
-          CURLOPT_URL             => self::$apiURL,
-          CURLOPT_RETURNTRANSFER  => 3,
-          CURLOPT_POST            => 1,
-          CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
-      );
-
       $xml = "<REQUEST>" .
               "<LOGIN authenticationkey='". \Settings::$apiKey ."' />" .
               "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
@@ -101,7 +91,7 @@
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array($session, $options);
+      curl_setopt_array($session, self::$options);
       curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
       $response = curl_exec($session);
       curl_close($session);
@@ -119,14 +109,6 @@
       * @return json-array
       */
     public function getStations() {
-      $options = array(
-          CURLOPT_FRESH_CONNECT   => 1,
-          CURLOPT_URL             => self::$apiURL,
-          CURLOPT_RETURNTRANSFER  => 3,
-          CURLOPT_POST            => 1,
-          CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
-      );
-
       $xml = "<REQUEST>" .
                 "<LOGIN authenticationkey='". \Settings::$apiKey ."' />" .
                 "<QUERY objecttype='TrainStation'>" .
@@ -138,7 +120,7 @@
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array($session, $options);
+      curl_setopt_array($session, self::$options);
       curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
       $response = curl_exec($session);
       curl_close($session);
