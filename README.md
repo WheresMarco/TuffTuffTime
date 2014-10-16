@@ -1,5 +1,5 @@
 # TuffTuffTime
-A WordPress widget that shows the current and future trainstops at a station. You can strip the class out and use only that if you don't like WordPress.
+A WordPress widget that shows the current and future stops at a train station in Sweden. You can strip the class out and use only that if you don't like WordPress.
 
 TuffTuffTime is tested on `PHP 5.5.14` and requires `cURL`. Released under the [MIT license](LICENSE).
 
@@ -21,7 +21,7 @@ create a `Settings.php` file that contains:
 // Require the class
 require_once("classes/TuffTuffTime.php");
 
-// Create a new TuffTuffTime-object with the station 
+// Create a new TuffTuffTime-object with the station
 // that you want the information for.
 $station = "Kalmar C";
 $tufftufftime = new \TuffTuffTime\TuffTuffTime($station);
