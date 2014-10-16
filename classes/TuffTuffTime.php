@@ -168,19 +168,19 @@
       * @return string
       */
     public function getStationName($id) {
-      $foundID = "";
+      $foundName = "";
 
       // // Loop through the returned array to find the name
       foreach($this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
         if (array_search($id, $station)) {
-          $foundID = $station['AdvertisedLocationName'];
+          $foundName = $station['AdvertisedLocationName'];
         }
       }
 
       // No match? Throw a exception
-      if ($foundID === "")
+      if ($foundName === "")
         throw new \Exception("Could not find the name in returned array.");
 
-      return $foundID;
+      return $foundName;
     }
   }
