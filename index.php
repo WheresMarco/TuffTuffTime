@@ -31,7 +31,7 @@
     }
 
     public static function getData() {
-      $station = "Kalmar C";
+      $station = "Diö";
       $tufftufftime = new \TuffTuffTime\TuffTuffTime($station);
 
       $departing = $tufftufftime->getDeparting();
@@ -73,8 +73,6 @@
 
       $stations = get_transient("tuffTuffTime_stations");
 
-      //var_dump($stations['RESPONSE']['RESULT'][0]['TrainStation']);
-
       $i = 0;
       foreach($direction['RESPONSE']['RESULT'][0]['TrainAnnouncement'] as $trainItem) {
         if ($i >= $number) {
@@ -83,8 +81,8 @@
 
         $time = strtotime($trainItem['AdvertisedTimeAtLocation']);
 
-        // TODO Fix this
-        if($time <= strtotime("-15 minutes")) {
+        // Removes trains that have already past
+        if($time <= (strtotime("-15 minutes") + 7200)) {
           continue;
         }
 
@@ -166,10 +164,71 @@
       $instance['number'] = $new_instance['number'];
       return $instance;
   	}
+
+    /**
+      * Shortcode - [tufftufftime where="departing" number="5"]
+      */
+    public static function shortcode($atts) {
+      extract(shortcode_atts(array('where' => '', 'number' => ''), $atts));
+      $where = empty($where) ? 'departing' : $where;
+      $number = empty($number) ? '5' : $number;
+
+      if ($where === "departing") {
+        // TODO Check if data exists or else get it
+        $direction = get_transient("tuffTuffTime_departing");
+        echo "<table class='tufftufftime'><tr><th>Avgång</th><th>Till</th><th>Spår</th><th>Tåg</th></tr>";
+      } else {
+        // TODO Check if data exists or else get it
+        $direction = get_transient("tuffTuffTime_arriving");
+        echo "<table class='tufftufftime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
+      }
+
+      $stations = get_transient("tuffTuffTime_stations");
+
+      $i = 0;
+      foreach($direction['RESPONSE']['RESULT'][0]['TrainAnnouncement'] as $trainItem) {
+        if ($i >= $number) {
+          break;
+        }
+
+        $time = strtotime($trainItem['AdvertisedTimeAtLocation']);
+
+        // Removes trains that have already past
+        if($time <= (strtotime("-15 minutes") + 7200)) {
+          continue;
+        }
+
+        echo "<tr>";
+          echo "<td>". date("H:i", $time) . "</td>";
+
+          if ($where === "departing") {
+            foreach($stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
+              if (array_search(end($trainItem['ToLocation']), $station)) {
+                echo "<td>" . $station['AdvertisedLocationName'] . "</td>";
+              }
+            }
+          } else {
+            foreach($stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
+              if (array_search($trainItem['FromLocation'][0], $station)) {
+                echo "<td>" . $station['AdvertisedLocationName'] . "</td>";
+              }
+            }
+          }
+
+          echo "<td>" . $trainItem['TrackAtLocation'] . "</td>";
+          echo "<td>" . $trainItem['AdvertisedTrainIdent'] . "</td>";
+        echo "</tr>";
+
+        $i++;
+      }
+
+      echo "</table>";
+    }
   }
 
   // Hooks
   register_activation_hook( __FILE__, array('tuffTuffTime', 'install'));
   register_deactivation_hook( __FILE__, array('tuffTuffTime', 'uninstall'));
   add_action('tuffTuffTime_download', array('tuffTuffTime', 'getData'));
-  add_action( 'widgets_init', create_function('', 'return register_widget("tuffTuffTime");') );
+  add_action('widgets_init', create_function('', 'return register_widget("tuffTuffTime");'));
+  add_shortcode('tufftufftime', array('tuffTuffTime', 'shortcode'));

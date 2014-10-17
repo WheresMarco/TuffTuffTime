@@ -151,6 +151,7 @@
       foreach($this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
         if (array_search($name, $station)) {
           $foundID = $station['LocationSignature'];
+          break;
         }
       }
 
