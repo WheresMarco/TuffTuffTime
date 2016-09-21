@@ -100,4 +100,59 @@ class Tufftufftime_Admin {
 
 	}
 
+	public function register_settings() {
+
+		// Register and create settings section for the plugin
+    register_setting('tufftufftime', 'tufftufftime_options');
+    add_settings_section( 'tufftufftime_options', '', function() {}, 'tufftufftime' );
+
+		// Add settings field for API Key
+		add_settings_field(
+		  'api_key',
+		  'API Key',
+			array( $this, 'create_textbox' ),
+		  'tufftufftime',
+		  'tufftufftime_options',
+			[
+	    	'label_for' => 'tufftufftime_api_key',
+	    ]
+		);
+
+	}
+
+	public function create_textbox($args) {
+
+		$options = get_option('tufftufftime_options');
+		?>
+			<input type="text" id="<?= esc_attr($args['label_for']); ?>" name="tufftufftime_options[<?= esc_attr($args['label_for']); ?>]" value="<?php echo $options[$args['label_for']]; ?>"></input>
+		<?php
+
+	}
+
+	/**
+	 * Create the options page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function create_options_page() {
+
+		add_submenu_page(
+			'options-general.php',
+			'TuffTuffTime',
+			'TuffTuffTime',
+			'manage_options',
+			'tufftufftime',
+			function() {
+
+				if ( !current_user_can('manage_options') ) :
+		      return;
+		    endif;
+
+				include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-admin-options.php' );
+
+			}
+		);
+
+	}
+
 }

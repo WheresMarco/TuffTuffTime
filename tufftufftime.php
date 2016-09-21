@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       TuffTuffTime
  * Plugin URI:        https://github.com/WheresMarco/TuffTuffTime
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       A WordPress widget that shows the current and future stops at a train station in Sweden.
  * Version:           1.0.0
  * Author:            Marco Hyyryläinen
  * Author URI:        http://wheresmar.co

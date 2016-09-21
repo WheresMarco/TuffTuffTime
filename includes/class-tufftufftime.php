@@ -57,6 +57,16 @@ class Tufftufftime {
 	 */
 	protected $version;
 
+	private $stations;
+	private $tufftufftime_options;
+  private static $options = array(
+    CURLOPT_FRESH_CONNECT   => 1,
+    CURLOPT_URL             => "http://api.trafikinfo.trafikverket.se/v1/data.json",
+    CURLOPT_RETURNTRANSFER  => 3,
+    CURLOPT_POST            => 1,
+    CURLOPT_HTTPHEADER      => array('Content-Type: text/xml')
+  );
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -75,6 +85,16 @@ class Tufftufftime {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+
+		$this->tufftufftime_options = get_option('tufftufftime_options');
+
+		// TEMP
+		// $this->stations = $this->load_stations();
+    // $station_ID = $this->get_station_ID('Stockholm Central');
+		//
+		// echo "<pre>";
+		// var_dump( $this->load_arriving( $station_ID ) );
+		// die();
 
 	}
 
@@ -154,6 +174,9 @@ class Tufftufftime {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'create_options_page' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
+
 	}
 
 	/**
@@ -211,5 +234,175 @@ class Tufftufftime {
 	public function get_version() {
 		return $this->version;
 	}
+
+	/**
+    * Get arriving trains/busses(?) to the station
+    *
+    * @return array
+  	*/
+  public function load_arriving( $station_ID ) {
+  	$xml = "<REQUEST>" .
+          	"<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+            	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
+              "<FILTER>" .
+                "<AND>" .
+                "<EQ name='ActivityType' value='Ankomst' />" .
+                "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
+                "<OR>" .
+                    "<AND>" .
+                      "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
+                    "</AND>" .
+                    "<AND>" .
+                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
+                      "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                    "</AND>" .
+                  "</OR>" .
+                "</AND>" .
+              "</FILTER>" .
+            "</QUERY>" .
+          "</REQUEST>";
+
+    // Open up curl session and fire of the request
+    $session = curl_init();
+    curl_setopt_array($session, self::$options);
+    curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
+    $response = curl_exec($session);
+    curl_close($session);
+
+    // Check if we got a response
+    if(!$response) :
+      throw new \Exception("Could not get stations");
+		endif;
+
+    return json_decode($response, true);
+  }
+
+  /**
+    * Get departing trains/busses(?) to the station
+    *
+    * @return array
+    */
+  public function load_departing( $station_ID ) {
+    $xml = "<REQUEST>" .
+            "<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+            "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
+              "<FILTER>" .
+                "<AND>" .
+                "<EQ name='ActivityType' value='Avgang' />" .
+                "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
+                "<OR>" .
+                    "<AND>" .
+                      "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
+                    "</AND>" .
+                    "<AND>" .
+                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
+                      "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                    "</AND>" .
+                  "</OR>" .
+                "</AND>" .
+              "</FILTER>" .
+            "</QUERY>" .
+            "</REQUEST>";
+
+      // Open up curl session and fire of the request
+      $session = curl_init();
+      curl_setopt_array( $session, self::$options );
+      curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
+      $response = curl_exec( $session );
+      curl_close( $session );
+
+      // Check if we got a response
+      if(!$response) :
+        throw new \Exception("Could not get stations");
+			endif;
+
+      return json_decode($response, true);
+    }
+
+	/**
+    * Retrives the stations from the api
+    *
+		* @since     1.0.0
+    * @return json-array
+  */
+  public function load_stations() {
+
+		// TODO: DON'T USE STATIC API KEY
+
+    $xml = "<REQUEST>" .
+              "<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+              "<QUERY objecttype='TrainStation'>" .
+              	"<FILTER/>" .
+              	"<INCLUDE>AdvertisedLocationName</INCLUDE>" .
+                "<INCLUDE>LocationSignature</INCLUDE>" .
+              "</QUERY>" .
+            "</REQUEST>";
+
+    // Open up curl session and fire of the request
+    $session = curl_init();
+    curl_setopt_array( $session, self::$options );
+    curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
+    $response = curl_exec( $session );
+    curl_close( $session );
+
+    // Check if we got a response
+    if ( !$response ) :
+      throw new \Exception("Could not get stations");
+		endif;
+
+
+    return json_decode( $response, true );
+  }
+
+  /**
+    * Get the stationID for a station.
+    *
+    * @param string $name - Name of the station
+    * @return string
+    */
+  private function get_station_ID( $name ) {
+    $foundID = "";
+
+    // Loop through the returned array to find the id
+    foreach( $this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
+      if ( array_search($name, $station) ) :
+        $foundID = $station['LocationSignature'];
+        break;
+      endif;
+    endforeach;
+
+    // No match? Throw a exception
+    if ($foundID === "") :
+      throw new \Exception("Could not find ID in returned array. Must be name exact name (ex. Stockholm C)");
+		endif;
+
+    return $foundID;
+  }
+
+  /**
+    * Get the name of a station from id.
+    *
+    * @param string $id - ID of the station
+    * @return string
+    */
+  public function get_station_name( $id ) {
+    $foundName = "";
+
+    // // Loop through the returned array to find the name
+    foreach( $this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
+      if (array_search($id, $station)) :
+        $foundName = $station['AdvertisedLocationName'];
+      endif;
+    endforeach;
+
+    // No match? Throw a exception
+    if ($foundName === "") :
+      throw new \Exception("Could not find the name in returned array.");
+		endif;
+
+    return $foundName;
+  }
 
 }
