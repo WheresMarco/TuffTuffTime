@@ -86,16 +86,6 @@ class Tufftufftime {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
-		$this->tufftufftime_options = get_option('tufftufftime_options');
-
-		// TEMP
-		// $this->stations = $this->load_stations();
-    // $station_ID = $this->get_station_ID('Stockholm Central');
-		//
-		// echo "<pre>";
-		// var_dump( $this->load_arriving( $station_ID ) );
-		// die();
-
 	}
 
 	/**
@@ -240,9 +230,9 @@ class Tufftufftime {
     *
     * @return array
   	*/
-  public function load_arriving( $station_ID ) {
+  public function load_arriving( $tufftufftime_options, $station_ID ) {
   	$xml = "<REQUEST>" .
-          	"<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+          	"<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
             	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
               "<FILTER>" .
                 "<AND>" .
@@ -283,9 +273,9 @@ class Tufftufftime {
     *
     * @return array
     */
-  public function load_departing( $station_ID ) {
+  public function load_departing( $tufftufftime_options, $station_ID ) {
     $xml = "<REQUEST>" .
-            "<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+            "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
             "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
               "<FILTER>" .
                 "<AND>" .
@@ -327,12 +317,10 @@ class Tufftufftime {
 		* @since     1.0.0
     * @return json-array
   */
-  public function load_stations() {
-
-		// TODO: DON'T USE STATIC API KEY
+  public function load_stations( $tufftufftime_options ) {
 
     $xml = "<REQUEST>" .
-              "<LOGIN authenticationkey='" . $this->tufftufftime_options['tufftufftime_api_key'] . "' />" .
+              "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
               "<QUERY objecttype='TrainStation'>" .
               	"<FILTER/>" .
               	"<INCLUDE>AdvertisedLocationName</INCLUDE>" .
@@ -362,11 +350,11 @@ class Tufftufftime {
     * @param string $name - Name of the station
     * @return string
     */
-  private function get_station_ID( $name ) {
+  public function get_station_ID( $tufftufftime_options, $stations, $name ) {
     $foundID = "";
 
     // Loop through the returned array to find the id
-    foreach( $this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
+    foreach( $stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
       if ( array_search($name, $station) ) :
         $foundID = $station['LocationSignature'];
         break;

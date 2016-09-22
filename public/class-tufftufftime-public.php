@@ -20,25 +20,25 @@
  * @subpackage Tufftufftime/public
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime_Public {
+class Tufftufftime_Public extends Tufftufftime {
 
 	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $plugin_name;
+	protected $plugin_name;
 
 	/**
 	 * The version of this plugin.
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   protected
 	 * @var      string    $version    The current version of this plugin.
 	 */
-	private $version;
+	protected $version;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -51,6 +51,14 @@ class Tufftufftime_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+
+		$tufftufftime_options = get_option('tufftufftime_options');
+		$stations = $this->load_stations( $tufftufftime_options );
+    $station_ID = $this->get_station_ID( $tufftufftime_options, $stations, 'Stockholm Central');
+
+		$arriving = $this->load_arriving( $tufftufftime_options, $station_ID );
+
+		$this->display_simple_timetable( $stations, $arriving );
 
 	}
 
@@ -97,6 +105,13 @@ class Tufftufftime_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tufftufftime-public.js', array( 'jquery' ), $this->version, false );
+
+	}
+
+	public function display_simple_timetable( $stations, $arriving ) {
+
+		include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-public-simple-timetable.php' );
+		die();
 
 	}
 
