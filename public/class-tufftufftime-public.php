@@ -52,14 +52,6 @@ class Tufftufftime_Public extends Tufftufftime {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		$tufftufftime_options = get_option('tufftufftime_options');
-		$stations = $this->load_stations( $tufftufftime_options );
-    $station_ID = $this->get_station_ID( $tufftufftime_options, $stations, 'Stockholm Central');
-
-		$arriving = $this->load_arriving( $tufftufftime_options, $station_ID );
-
-		$this->display_simple_timetable( $stations, $arriving );
-
 	}
 
 	/**
@@ -108,10 +100,35 @@ class Tufftufftime_Public extends Tufftufftime {
 
 	}
 
-	public function display_simple_timetable( $stations, $arriving ) {
+  /**
+	 * Display the shortcode.
+   * Ex: [tufftufftime station="Stockholm Central" limit="5" type="arriving"]
+	 *
+	 * @since    1.0.0
+	 */
+	public function display_simple_timetable( $attributes ) {
 
-		include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-public-simple-timetable.php' );
-		die();
+    // Define the array of defaults
+		$defaults = array(
+			'station' => 'Stockholm Central',
+      'limit' => '5',
+      'type' => 'arriving'
+		);
+
+		// And merge them together
+		$attributes = wp_parse_args( $attributes, $defaults );
+
+    $tufftufftime_options = get_option('tufftufftime_options');
+		$stations = $this->load_stations( $tufftufftime_options );
+    $station_ID = $this->get_station_ID( $tufftufftime_options, $stations, 'Stockholm Central');
+
+    if ( $attributes['type'] === 'arriving' ) :
+		  $data = $this->load_arriving( $tufftufftime_options, $station_ID );
+    else :
+      $data = $this->load_departing( $tufftufftime_options, $station_ID );
+    endif;
+
+		return include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-public-simple-timetable.php' );
 
 	}
 

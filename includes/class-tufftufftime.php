@@ -183,6 +183,8 @@ class Tufftufftime {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+    add_shortcode( 'tufftufftime', array( $plugin_public, 'display_simple_timetable' ) );
+
 	}
 
 	/**

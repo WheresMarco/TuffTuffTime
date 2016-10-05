@@ -11,32 +11,44 @@
  * @package    Tufftufftime
  * @subpackage Tufftufftime/public/partials
  */
-?>
 
-<h1>Simple timetable</h1>
-<?php
-  echo "<table class='tufftufftime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
-  foreach ( $arriving['RESPONSE']['RESULT'][0]['TrainAnnouncement'] as $item ) :
-    $time = strtotime($item['AdvertisedTimeAtLocation']);
+ $returnHTML = '';
 
-        // Removes trains that have already past
-        if($time <= (strtotime("-15 minutes") + 7200)) {
-          continue;
-        }
+  if ( $attributes['type'] === 'arriving' ) :
+    $returnHTML .= "<table class='tufftufftime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
+  else :
+     $returnHTML .= "<table class='tufftufftime'><tr><th>Avgång</th><th>Till</th><th>Spår</th><th>Tåg</th></tr>";
+  endif;
 
-        echo "<tr>";
-          echo "<td>". date("H:i", $time) . "</td>";
+    for ( $i = 0; $i < (int)$attributes['limit']; $i++ ) {
+      $item = $data['RESPONSE']['RESULT'][0]['TrainAnnouncement'][$i];
 
-            foreach($stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
-              if (array_search($item['FromLocation'][0], $station)) {
-                echo "<td>" . $station['AdvertisedLocationName'] . "</td>";
-              }
+      $time = strtotime($item['AdvertisedTimeAtLocation']);
+
+      // Removes trains that have already past
+      if($time <= (strtotime("-15 minutes") + 7200)) {
+        continue;
+      }
+
+      $returnHTML .= "<tr>";
+        $returnHTML .= "<td>". date("H:i", $time) . "</td>";
+          if ( $attributes['type'] === 'arriving' ) :
+            $location = $item['FromLocation'][0];
+          else :
+            $location = array_pop((array_slice($item['ToLocation'], -1)));
+          endif;
+
+          foreach($stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) {
+            if (array_search($location, $station)) {
+              $returnHTML .= "<td>" . $station['AdvertisedLocationName'] . "</td>";
             }
+          }
 
+        $returnHTML .= "<td>" . $item['TrackAtLocation'] . "</td>";
+        $returnHTML .= "<td>" . $item['AdvertisedTrainIdent'] . "</td>";
+      $returnHTML .= "</tr>";
+    }
+  $returnHTML .= "</table>";
 
-          echo "<td>" . $item['TrackAtLocation'] . "</td>";
-          echo "<td>" . $item['AdvertisedTrainIdent'] . "</td>";
-        echo "</tr>";
-  endforeach;
-  echo "</table>";
+  return $returnHTML;
 ?>
