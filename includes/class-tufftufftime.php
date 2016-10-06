@@ -9,8 +9,8 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime {
+class TuffTuffTime {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Tufftufftime {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Tufftufftime_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      TuffTuffTime_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -58,7 +58,7 @@ class Tufftufftime {
 	protected $version;
 
 	private $stations;
-	private $tufftufftime_options;
+	private $TuffTuffTime_options;
   private static $options = array(
     CURLOPT_FRESH_CONNECT   => 1,
     CURLOPT_URL             => "http://api.trafikinfo.trafikverket.se/v1/data.json",
@@ -78,7 +78,7 @@ class Tufftufftime {
 	 */
 	public function __construct() {
 
-		$this->plugin_name = 'tufftufftime';
+		$this->plugin_name = 'TuffTuffTime';
 		$this->version = '1.0.0';
 
 		$this->load_dependencies();
@@ -93,10 +93,10 @@ class Tufftufftime {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Tufftufftime_Loader. Orchestrates the hooks of the plugin.
-	 * - Tufftufftime_i18n. Defines internationalization functionality.
-	 * - Tufftufftime_Admin. Defines all hooks for the admin area.
-	 * - Tufftufftime_Public. Defines all hooks for the public side of the site.
+	 * - TuffTuffTime_Loader. Orchestrates the hooks of the plugin.
+	 * - TuffTuffTime_i18n. Defines internationalization functionality.
+	 * - TuffTuffTime_Admin. Defines all hooks for the admin area.
+	 * - TuffTuffTime_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -110,33 +110,33 @@ class Tufftufftime {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tufftufftime-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-TuffTuffTime-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tufftufftime-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-TuffTuffTime-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tufftufftime-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-TuffTuffTime-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-tufftufftime-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-TuffTuffTime-public.php';
 
-		$this->loader = new Tufftufftime_Loader();
+		$this->loader = new TuffTuffTime_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Tufftufftime_i18n class in order to set the domain and to register the hook
+	 * Uses the TuffTuffTime_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -144,7 +144,7 @@ class Tufftufftime {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Tufftufftime_i18n();
+		$plugin_i18n = new TuffTuffTime_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -158,7 +158,7 @@ class Tufftufftime {
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
-		$plugin_admin = new Tufftufftime_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new TuffTuffTime_Admin( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 	}
 
@@ -171,12 +171,12 @@ class Tufftufftime {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Tufftufftime_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new TuffTuffTime_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-    add_shortcode( 'tufftufftime', array( $plugin_public, 'display_simple_timetable' ) );
+    add_shortcode( 'TuffTuffTime', array( $plugin_public, 'display_simple_timetable' ) );
 
 	}
 
@@ -204,7 +204,7 @@ class Tufftufftime {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Tufftufftime_Loader    Orchestrates the hooks of the plugin.
+	 * @return    TuffTuffTime_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -225,12 +225,12 @@ class Tufftufftime {
     *
     * @return array
   	*/
-  public function load_arriving( $tufftufftime_options, $station_ID ) {
-    $transient_id = '_tufftufftime_arriving_' . $station_ID;
+  public function load_arriving( $TuffTuffTime_options, $station_ID ) {
+    $transient_id = '_TuffTuffTime_arriving_' . $station_ID;
 
     if ( false === ( $arriving = get_transient( $transient_id ) ) ) {
       $xml = "<REQUEST>" .
-            	"<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+            	"<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
               	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
                 "<FILTER>" .
                   "<AND>" .
@@ -276,12 +276,12 @@ class Tufftufftime {
     *
     * @return array
     */
-  public function load_departing( $tufftufftime_options, $station_ID ) {
-    $transient_id = '_tufftufftime_departing_' . $station_ID;
+  public function load_departing( $TuffTuffTime_options, $station_ID ) {
+    $transient_id = '_TuffTuffTime_departing_' . $station_ID;
 
     if ( false === ( $departing = get_transient( $transient_id ) ) ) {
       $xml = "<REQUEST>" .
-              "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+              "<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
               "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
                 "<FILTER>" .
                   "<AND>" .
@@ -328,12 +328,12 @@ class Tufftufftime {
 		* @since     1.0.0
     * @return json-array
   */
-  public function load_stations( $tufftufftime_options ) {
-    $transient_id = '_tufftufftime_stations';
+  public function load_stations( $TuffTuffTime_options ) {
+    $transient_id = '_TuffTuffTime_stations';
 
     if ( false === ( $stations = get_transient( $transient_id ) ) ) {
       $xml = "<REQUEST>" .
-                "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+                "<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
                 "<QUERY objecttype='TrainStation'>" .
                  "<FILTER/>" .
                  "<INCLUDE>AdvertisedLocationName</INCLUDE>" .
@@ -367,7 +367,7 @@ class Tufftufftime {
     * @param string $name - Name of the station
     * @return string
     */
-  public function get_station_ID( $tufftufftime_options, $stations, $name ) {
+  public function get_station_ID( $TuffTuffTime_options, $stations, $name ) {
     $foundID = "";
 
     // Loop through the returned array to find the id

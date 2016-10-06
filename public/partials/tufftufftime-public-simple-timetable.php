@@ -8,16 +8,16 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/public/partials
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/public/partials
  */
 
  $returnHTML = '';
 
   if ( $attributes['type'] === 'arriving' ) :
-    $returnHTML .= "<table class='tufftufftime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
+    $returnHTML .= "<table class='TuffTuffTime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
   else :
-     $returnHTML .= "<table class='tufftufftime'><tr><th>Avgång</th><th>Till</th><th>Spår</th><th>Tåg</th></tr>";
+     $returnHTML .= "<table class='TuffTuffTime'><tr><th>Avgång</th><th>Till</th><th>Spår</th><th>Tåg</th></tr>";
   endif;
 
     for ( $i = 0; $i < (int)$attributes['limit']; $i++ ) {

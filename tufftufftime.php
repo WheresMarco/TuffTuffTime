@@ -10,7 +10,7 @@
  *
  * @link              http://wheresmar.co
  * @since             1.0.0
- * @package           Tufftufftime
+ * @package           TuffTuffTime
  *
  * @wordpress-plugin
  * Plugin Name:       TuffTuffTime
@@ -21,7 +21,7 @@
  * Author URI:        http://wheresmar.co
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       tufftufftime
+ * Text Domain:       TuffTuffTime
  * Domain Path:       /languages
  */
 
@@ -32,30 +32,30 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-tufftufftime-activator.php
+ * This action is documented in includes/class-TuffTuffTime-activator.php
  */
-function activate_tufftufftime() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tufftufftime-activator.php';
-	Tufftufftime_Activator::activate();
+function activate_TuffTuffTime() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-TuffTuffTime-activator.php';
+	TuffTuffTime_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-tufftufftime-deactivator.php
+ * This action is documented in includes/class-TuffTuffTime-deactivator.php
  */
-function deactivate_tufftufftime() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tufftufftime-deactivator.php';
-	Tufftufftime_Deactivator::deactivate();
+function deactivate_TuffTuffTime() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-TuffTuffTime-deactivator.php';
+	TuffTuffTime_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_tufftufftime' );
-register_deactivation_hook( __FILE__, 'deactivate_tufftufftime' );
+register_activation_hook( __FILE__, 'activate_TuffTuffTime' );
+register_deactivation_hook( __FILE__, 'deactivate_TuffTuffTime' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-tufftufftime.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-TuffTuffTime.php';
 
 /**
  * Begins execution of the plugin.
@@ -66,10 +66,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-tufftufftime.php';
  *
  * @since    1.0.0
  */
-function run_tufftufftime() {
+function run_TuffTuffTime() {
 
-	$plugin = new Tufftufftime();
+	$plugin = new TuffTuffTime();
 	$plugin->run();
 
 }
-run_tufftufftime();
+run_TuffTuffTime();

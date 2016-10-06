@@ -6,8 +6,8 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime_Activator {
+class TuffTuffTime_Activator {
 
 	/**
 	 * Short Description. (use period)

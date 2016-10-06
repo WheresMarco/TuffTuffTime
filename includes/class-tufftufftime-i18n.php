@@ -9,8 +9,8 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime_i18n {
+class TuffTuffTime_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Tufftufftime_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'tufftufftime',
+			'TuffTuffTime',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

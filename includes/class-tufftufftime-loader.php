@@ -6,8 +6,8 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/includes
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/includes
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime_Loader {
+class TuffTuffTime_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

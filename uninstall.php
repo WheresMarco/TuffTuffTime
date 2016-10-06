@@ -22,7 +22,7 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
+ * @package    TuffTuffTime
  */
 
 // If uninstall not called from WordPress, then exit.

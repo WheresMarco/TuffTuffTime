@@ -6,8 +6,8 @@
  * @link       http://wheresmar.co
  * @since      1.0.0
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/public
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/public
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Tufftufftime
- * @subpackage Tufftufftime/public
+ * @package    TuffTuffTime
+ * @subpackage TuffTuffTime/public
  * @author     Marco Hyyryläinen <marco@wheresmar.co>
  */
-class Tufftufftime_Public extends Tufftufftime {
+class TuffTuffTime_Public extends TuffTuffTime {
 
 	/**
 	 * The ID of this plugin.
@@ -65,15 +65,15 @@ class Tufftufftime_Public extends Tufftufftime {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Tufftufftime_Loader as all of the hooks are defined
+		 * defined in TuffTuffTime_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Tufftufftime_Loader will then create the relationship
+		 * The TuffTuffTime_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/tufftufftime-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/TuffTuffTime-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -88,21 +88,21 @@ class Tufftufftime_Public extends Tufftufftime {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Tufftufftime_Loader as all of the hooks are defined
+		 * defined in TuffTuffTime_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Tufftufftime_Loader will then create the relationship
+		 * The TuffTuffTime_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tufftufftime-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/TuffTuffTime-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 
   /**
 	 * Display the shortcode.
-   * Ex: [tufftufftime station="Stockholm Central" limit="5" type="arriving"]
+   * Ex: [TuffTuffTime station="Stockholm Central" limit="5" type="arriving"]
 	 *
 	 * @since    1.0.0
 	 */
@@ -118,17 +118,17 @@ class Tufftufftime_Public extends Tufftufftime {
 		// And merge them together
 		$attributes = wp_parse_args( $attributes, $defaults );
 
-    $tufftufftime_options = get_option('tufftufftime_options');
-		$stations = $this->load_stations( $tufftufftime_options );
-    $station_ID = $this->get_station_ID( $tufftufftime_options, $stations, 'Stockholm Central');
+    $TuffTuffTime_options = get_option('TuffTuffTime_options');
+		$stations = $this->load_stations( $TuffTuffTime_options );
+    $station_ID = $this->get_station_ID( $TuffTuffTime_options, $stations, 'Stockholm Central');
 
     if ( $attributes['type'] === 'arriving' ) :
-		  $data = $this->load_arriving( $tufftufftime_options, $station_ID );
+		  $data = $this->load_arriving( $TuffTuffTime_options, $station_ID );
     else :
-      $data = $this->load_departing( $tufftufftime_options, $station_ID );
+      $data = $this->load_departing( $TuffTuffTime_options, $station_ID );
     endif;
 
-		return include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-public-simple-timetable.php' );
+		return include( plugin_dir_path( __FILE__ ) . 'partials/TuffTuffTime-public-simple-timetable.php' );
 
 	}
 
