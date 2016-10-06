@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TuffTuffTime\n"
+"POT-Creation-Date: 2016-10-06 14:41+0200\n"
+"PO-Revision-Date: 2016-10-06 14:42+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: tufftufftime.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: admin/class-tufftufftime-admin.php:60
+msgid "Trafiklab API-key"
+msgstr "Trafiklab API-nyckel"
+
+#: admin/class-tufftufftime-admin.php:79
+msgid ""
+"You have to register an account at <a href=\"https://www.trafiklab.se/\" "
+"target=\"_blank\">Trafiklab</a> and create an application that uses <a href="
+"\"https://www.trafiklab.se/api/trafikverket-oppet-api\" target=\"_blank"
+"\">Trafikverkets Open API</a> to use TuffTuffTime. You should then be able "
+"to create an API-key that can be used with this plugin."
+msgstr ""
+"Du måste registrera ett konto på <a href=\"https://www.trafiklab.se/\" "
+"target=\"_blank\">Trafiklab</a> och skapa en applikation som använder <a "
+"href=\"https://www.trafiklab.se/api/trafikverket-oppet-api\" target=\"_blank"
+"\">Trafikverkets öppna API</a> för att kunna använda TuffTuffTime. Du bör "
+"då kunna generera en API-nyckel som kan användas med tillägget."
+
+#: public/partials/tufftufftime-public-simple-timetable.php:18
+msgid "Arriving"
+msgstr "Ankommer"
+
+#: public/partials/tufftufftime-public-simple-timetable.php:18
+msgid "From"
+msgstr "Från"
+
+#: public/partials/tufftufftime-public-simple-timetable.php:18
+#: public/partials/tufftufftime-public-simple-timetable.php:20
+msgid "Track"
+msgstr "Spår"
+
+#: public/partials/tufftufftime-public-simple-timetable.php:18
+#: public/partials/tufftufftime-public-simple-timetable.php:20
+msgid "Train"
+msgstr "Tåg"
+
+#: public/partials/tufftufftime-public-simple-timetable.php:20
+msgid "Departing"
+msgstr "Avgår"
+
+#: public/partials/tufftufftime-public-simple-timetable.php:20
+msgid "To"
+msgstr "Till"
+
+#. Plugin Name of the plugin/theme
+msgid "TuffTuffTime"
+msgstr "TuffTuffTime"
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/WheresMarco/TuffTuffTime"
+msgstr "https://github.com/WheresMarco/TuffTuffTime"
+
+#. Description of the plugin/theme
+msgid ""
+"A WordPress widget that shows the current and future stops at a train "
+"station in Sweden."
+msgstr ""
+"Ett WordPress-tillägg som visar nuvarande och kommande ankomster/avgångar "
+"för en tågstation i Sverige."
+
+#. Author of the plugin/theme
+msgid "Marco Hyyryläinen"
+msgstr "Marco Hyyryläinen"
+
+#. Author URI of the plugin/theme
+msgid "http://wheresmar.co"
+msgstr "http://wheresmar.co"

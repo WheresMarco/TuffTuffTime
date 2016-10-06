@@ -27,5 +27,10 @@
 
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+
+  // Remove api key from options
+  delete_option( 'tufftufftime_api_key' );
+
 	exit;
+
 }

@@ -15,9 +15,9 @@
  $returnHTML = '';
 
   if ( $attributes['type'] === 'arriving' ) :
-    $returnHTML .= "<table class='TuffTuffTime'><tr><th>Ankomst</th><th>Från</th><th>Spår</th><th>Tåg</th></tr>";
+    $returnHTML .= '<table class="TuffTuffTime"><tr><th>' . __( 'Arriving', 'TuffTuffTime' ) . '</th><th>' . __( 'From', 'TuffTuffTime' ) . '</th><th>' . __( 'Track', 'TuffTuffTime' ) . '</th><th>' . __( 'Train', 'TuffTuffTime' ) . '</th></tr>';
   else :
-     $returnHTML .= "<table class='TuffTuffTime'><tr><th>Avgång</th><th>Till</th><th>Spår</th><th>Tåg</th></tr>";
+     $returnHTML .= '<table class="TuffTuffTime"><tr><th>' . __( 'Departing', 'TuffTuffTime' ) . '</th><th>' . __( 'To', 'TuffTuffTime' ) . '</th><th>' . __( 'Track', 'TuffTuffTime' ) . '</th><th>' . __( 'Train', 'TuffTuffTime' ) . '</th></tr>';
   endif;
 
     for ( $i = 0; $i < (int)$attributes['limit']; $i++ ) {

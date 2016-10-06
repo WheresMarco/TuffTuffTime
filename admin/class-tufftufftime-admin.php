@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -50,18 +51,18 @@ class TuffTuffTime_Admin {
 	public function register_settings() {
 
 		// Register and create settings section for the plugin
-    register_setting('TuffTuffTime', 'TuffTuffTime_options');
-    add_settings_section( 'TuffTuffTime_options', '', array( $this, 'create_settings_section' ), 'general' );
+    register_setting('TuffTuffTime', 'tufftufftime_options');
+    add_settings_section( 'tufftufftime_options', '', array( $this, 'create_settings_section' ), 'general' );
 
 		// Add settings field for API Key
 		add_settings_field(
 		  'api_key',
-		  'Trafiklab API-nyckel',
+		  __( 'Trafiklab API-key', 'TuffTuffTime' ),
 			array( $this, 'create_textbox' ),
 		  'general',
-		  'TuffTuffTime_options',
+		  'tufftufftime_options',
 			[
-	    	'label_for' => 'TuffTuffTime_api_key',
+	    	'label_for' => 'tufftufftime_api_key',
 	    ]
 		);
 
@@ -75,7 +76,7 @@ class TuffTuffTime_Admin {
   public function create_settings_section( $arg ) {
 
   	echo '<h2 class="title">' . $this->plugin_name . '</h2>';
-    echo '<p>Du måste registrera ett konto på <a href="https://www.trafiklab.se/" target="_blank">Trafiklab</a> och skapa en applikation som använder <a href="https://www.trafiklab.se/api/trafikverket-oppet-api" target="_blank">Trafikverkets öppna API</a> för att kunna använda TuffTuffTime. Du bör då kunna generera en API-nyckel som kan användas med tillägget.</p>';
+    echo '<p>' . __( 'You have to register an account at <a href="https://www.trafiklab.se/" target="_blank">Trafiklab</a> and create an application that uses <a href="https://www.trafiklab.se/api/trafikverket-oppet-api" target="_blank">Trafikverkets Open API</a> to use TuffTuffTime. You should then be able to create an API-key that can be used with this plugin.', 'TuffTuffTime' ) . '</p>';
 
   }
 
@@ -86,12 +87,12 @@ class TuffTuffTime_Admin {
    */
 	public function create_textbox( $args ) {
 
-		$options = get_option('TuffTuffTime_options');
+		$options = get_option('tufftufftime_options');
 		?>
 			<input
         type="text"
         id="<?php echo esc_attr($args['label_for']); ?>"
-        name="TuffTuffTime_options[<?php echo esc_attr($args['label_for']); ?>]"
+        name="tufftufftime_options[<?php echo esc_attr($args['label_for']); ?>]"
         value="<?php echo $options[$args['label_for']]; ?>"
         class="regular-text code" />
 		<?php

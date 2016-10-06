@@ -57,9 +57,23 @@ class TuffTuffTime {
 	 */
 	protected $version;
 
+  /**
+	 * A store for all the stations retrived from API.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      array    $stations    The stations.
+	 */
 	private $stations;
-	private $TuffTuffTime_options;
-  private static $options = array(
+
+  /**
+	 * Static settings for the CURL.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      array    $version    Settings for CURL.
+	 */
+  private static $curl_options = array(
     CURLOPT_FRESH_CONNECT   => 1,
     CURLOPT_URL             => "http://api.trafikinfo.trafikverket.se/v1/data.json",
     CURLOPT_RETURNTRANSFER  => 3,
@@ -158,8 +172,11 @@ class TuffTuffTime {
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
+
 		$plugin_admin = new TuffTuffTime_Admin( $this->get_plugin_name(), $this->get_version() );
+    
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
+
 	}
 
 	/**
@@ -173,10 +190,7 @@ class TuffTuffTime {
 
 		$plugin_public = new TuffTuffTime_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-    add_shortcode( 'TuffTuffTime', array( $plugin_public, 'display_simple_timetable' ) );
+    add_shortcode( 'tufftufftime', array( $plugin_public, 'display_simple_timetable' ) );
 
 	}
 
@@ -186,7 +200,9 @@ class TuffTuffTime {
 	 * @since    1.0.0
 	 */
 	public function run() {
+
 		$this->loader->run();
+
 	}
 
 	/**
@@ -197,7 +213,9 @@ class TuffTuffTime {
 	 * @return    string    The name of the plugin.
 	 */
 	public function get_plugin_name() {
+
 		return $this->plugin_name;
+
 	}
 
 	/**
@@ -207,7 +225,9 @@ class TuffTuffTime {
 	 * @return    TuffTuffTime_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
+
 		return $this->loader;
+
 	}
 
 	/**
@@ -217,20 +237,25 @@ class TuffTuffTime {
 	 * @return    string    The version number of the plugin.
 	 */
 	public function get_version() {
+
 		return $this->version;
+
 	}
 
 	/**
-    * Get arriving trains/busses(?) to the station
-    *
-    * @return array
-  	*/
+   * Get arriving trains to the station
+   *
+   * @since     1.0.0
+   * @return    array
+   */
   public function load_arriving( $TuffTuffTime_options, $station_ID ) {
+
     $transient_id = '_TuffTuffTime_arriving_' . $station_ID;
 
-    if ( false === ( $arriving = get_transient( $transient_id ) ) ) {
+    if ( false === ( $arriving = get_transient( $transient_id ) ) ) :
+
       $xml = "<REQUEST>" .
-            	"<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
+            	"<LOGIN authenticationkey='" . $TuffTuffTime_options['tufftufftime_api_key'] . "' />" .
               	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
                 "<FILTER>" .
                   "<AND>" .
@@ -253,7 +278,7 @@ class TuffTuffTime {
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array($session, self::$options);
+      curl_setopt_array($session, self::$curl_options);
       curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
       $response = curl_exec($session);
       curl_close($session);
@@ -266,22 +291,27 @@ class TuffTuffTime {
       $arriving = json_decode( $response, true );
 
 		  set_transient( $transient_id, $arriving, 20 * MINUTE_IN_SECONDS );
-		}
+
+    endif;
 
     return $arriving;
+
   }
 
   /**
-    * Get departing trains/busses(?) to the station
-    *
-    * @return array
-    */
+   * Get departing trains/busses to the station
+   *
+   * @since     1.0.0
+   * @return    array
+   */
   public function load_departing( $TuffTuffTime_options, $station_ID ) {
+
     $transient_id = '_TuffTuffTime_departing_' . $station_ID;
 
-    if ( false === ( $departing = get_transient( $transient_id ) ) ) {
+    if ( false === ( $departing = get_transient( $transient_id ) ) ) :
+
       $xml = "<REQUEST>" .
-              "<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
+              "<LOGIN authenticationkey='" . $TuffTuffTime_options['tufftufftime_api_key'] . "' />" .
               "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
                 "<FILTER>" .
                   "<AND>" .
@@ -304,7 +334,7 @@ class TuffTuffTime {
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array( $session, self::$options );
+      curl_setopt_array( $session, self::$curl_options );
       curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
       $response = curl_exec( $session );
       curl_close( $session );
@@ -317,23 +347,27 @@ class TuffTuffTime {
       $departing = json_decode( $response, true );
 
 		  set_transient( $transient_id, $departing, 20 * MINUTE_IN_SECONDS );
-		}
+
+		endif;
 
     return $departing;
+
   }
 
 	/**
-    * Retrives the stations from the api
-    *
-		* @since     1.0.0
-    * @return json-array
+   * Retrives the stations from the api
+   *
+	 * @since     1.0.0
+   * @return    json-array
   */
   public function load_stations( $TuffTuffTime_options ) {
+
     $transient_id = '_TuffTuffTime_stations';
 
-    if ( false === ( $stations = get_transient( $transient_id ) ) ) {
+    if ( false === ( $stations = get_transient( $transient_id ) ) ) :
+
       $xml = "<REQUEST>" .
-                "<LOGIN authenticationkey='" . $TuffTuffTime_options['TuffTuffTime_api_key'] . "' />" .
+                "<LOGIN authenticationkey='" . $TuffTuffTime_options['tufftufftime_api_key'] . "' />" .
                 "<QUERY objecttype='TrainStation'>" .
                  "<FILTER/>" .
                  "<INCLUDE>AdvertisedLocationName</INCLUDE>" .
@@ -343,7 +377,7 @@ class TuffTuffTime {
 
       // Open up curl session and fire of the request
       $session = curl_init();
-      curl_setopt_array( $session, self::$options );
+      curl_setopt_array( $session, self::$curl_options );
       curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
       $response = curl_exec( $session );
       curl_close( $session );
@@ -356,26 +390,32 @@ class TuffTuffTime {
       $stations = json_decode( $response, true );
 
 		  set_transient( $transient_id, $stations, WEEK_IN_SECONDS );
-		}
+
+		endif;
 
     return $stations;
+
   }
 
   /**
-    * Get the stationID for a station.
-    *
-    * @param string $name - Name of the station
-    * @return string
-    */
+   * Get the stationID for a station.
+   *
+   * @since     1.0.0
+   * @param     string $name - Name of the station
+   * @return    string
+   */
   public function get_station_ID( $TuffTuffTime_options, $stations, $name ) {
+
     $foundID = "";
 
     // Loop through the returned array to find the id
     foreach( $stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
+
       if ( array_search($name, $station) ) :
         $foundID = $station['LocationSignature'];
         break;
       endif;
+
     endforeach;
 
     // No match? Throw a exception
@@ -384,22 +424,27 @@ class TuffTuffTime {
 		endif;
 
     return $foundID;
+
   }
 
   /**
-    * Get the name of a station from id.
-    *
-    * @param string $id - ID of the station
-    * @return string
-    */
+   * Get the name of a station from id.
+   *
+   * @since     1.0.0
+   * @param     string $id - ID of the station
+   * @return    string
+   */
   public function get_station_name( $id ) {
-    $foundName = "";
 
-    // // Loop through the returned array to find the name
+    $foundName = '';
+
+    // Loop through the returned array to find the name
     foreach( $this->stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station ) :
+
       if (array_search($id, $station)) :
         $foundName = $station['AdvertisedLocationName'];
       endif;
+
     endforeach;
 
     // No match? Throw a exception
@@ -408,6 +453,7 @@ class TuffTuffTime {
 		endif;
 
     return $foundName;
+
   }
 
 }

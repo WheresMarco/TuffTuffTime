@@ -31,27 +31,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-TuffTuffTime-activator.php
- */
-function activate_TuffTuffTime() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-TuffTuffTime-activator.php';
-	TuffTuffTime_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-TuffTuffTime-deactivator.php
- */
-function deactivate_TuffTuffTime() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-TuffTuffTime-deactivator.php';
-	TuffTuffTime_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_TuffTuffTime' );
-register_deactivation_hook( __FILE__, 'deactivate_TuffTuffTime' );
-
-/**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
