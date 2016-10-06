@@ -174,7 +174,7 @@ class TuffTuffTime {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new TuffTuffTime_Admin( $this->get_plugin_name(), $this->get_version() );
-    
+
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 
 	}
@@ -290,7 +290,7 @@ class TuffTuffTime {
 
       $arriving = json_decode( $response, true );
 
-		  set_transient( $transient_id, $arriving, 20 * MINUTE_IN_SECONDS );
+		  set_transient( $transient_id, $arriving, 5 * MINUTE_IN_SECONDS );
 
     endif;
 
@@ -346,7 +346,7 @@ class TuffTuffTime {
 
       $departing = json_decode( $response, true );
 
-		  set_transient( $transient_id, $departing, 20 * MINUTE_IN_SECONDS );
+		  set_transient( $transient_id, $departing, 5 * MINUTE_IN_SECONDS );
 
 		endif;
 
