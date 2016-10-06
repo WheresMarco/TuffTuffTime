@@ -233,41 +233,49 @@ class Tufftufftime {
     * @return array
   	*/
   public function load_arriving( $tufftufftime_options, $station_ID ) {
-  	$xml = "<REQUEST>" .
-          	"<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
-            	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
-              "<FILTER>" .
-                "<AND>" .
-                "<EQ name='ActivityType' value='Ankomst' />" .
-                "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
-                "<OR>" .
-                    "<AND>" .
-                      "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
-                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
-                    "</AND>" .
-                    "<AND>" .
-                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
-                      "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
-                    "</AND>" .
-                  "</OR>" .
-                "</AND>" .
-              "</FILTER>" .
-            "</QUERY>" .
-          "</REQUEST>";
+    $transient_id = '_tufftufftime_arriving_' . $station_ID;
 
-    // Open up curl session and fire of the request
-    $session = curl_init();
-    curl_setopt_array($session, self::$options);
-    curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
-    $response = curl_exec($session);
-    curl_close($session);
+    if ( false === ( $arriving = get_transient( $transient_id ) ) ) {
+      $xml = "<REQUEST>" .
+            	"<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+              	"<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
+                "<FILTER>" .
+                  "<AND>" .
+                  "<EQ name='ActivityType' value='Ankomst' />" .
+                  "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
+                  "<OR>" .
+                      "<AND>" .
+                        "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                        "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
+                      "</AND>" .
+                      "<AND>" .
+                        "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
+                        "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                      "</AND>" .
+                    "</OR>" .
+                  "</AND>" .
+                "</FILTER>" .
+              "</QUERY>" .
+            "</REQUEST>";
 
-    // Check if we got a response
-    if(!$response) :
-      throw new \Exception("Could not get stations");
-		endif;
+      // Open up curl session and fire of the request
+      $session = curl_init();
+      curl_setopt_array($session, self::$options);
+      curl_setopt($session, CURLOPT_POSTFIELDS, "$xml");
+      $response = curl_exec($session);
+      curl_close($session);
 
-    return json_decode($response, true);
+      // Check if we got a response
+      if(!$response) :
+        throw new \Exception("Could not get arriving");
+  		endif;
+
+      $arriving = json_decode( $response, true );
+
+		  set_transient( $transient_id, $arriving, 20 * MINUTE_IN_SECONDS );
+		}
+
+    return $arriving;
   }
 
   /**
@@ -276,27 +284,30 @@ class Tufftufftime {
     * @return array
     */
   public function load_departing( $tufftufftime_options, $station_ID ) {
-    $xml = "<REQUEST>" .
-            "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
-            "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
-              "<FILTER>" .
-                "<AND>" .
-                "<EQ name='ActivityType' value='Avgang' />" .
-                "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
-                "<OR>" .
-                    "<AND>" .
-                      "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
-                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
-                    "</AND>" .
-                    "<AND>" .
-                      "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
-                      "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
-                    "</AND>" .
-                  "</OR>" .
-                "</AND>" .
-              "</FILTER>" .
-            "</QUERY>" .
-            "</REQUEST>";
+    $transient_id = '_tufftufftime_departing_' . $station_ID;
+
+    if ( false === ( $departing = get_transient( $transient_id ) ) ) {
+      $xml = "<REQUEST>" .
+              "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+              "<QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation'>" .
+                "<FILTER>" .
+                  "<AND>" .
+                  "<EQ name='ActivityType' value='Avgang' />" .
+                  "<EQ name='LocationSignature' value='" . $station_ID . "' />" .
+                  "<OR>" .
+                      "<AND>" .
+                        "<GT name='AdvertisedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                        "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(14:00:00)' />" .
+                      "</AND>" .
+                      "<AND>" .
+                        "<LT name='AdvertisedTimeAtLocation' value='\$dateadd(00:30:00)' />" .
+                        "<GT name='EstimatedTimeAtLocation' value='\$dateadd(-00:15:00)' />" .
+                      "</AND>" .
+                    "</OR>" .
+                  "</AND>" .
+                "</FILTER>" .
+              "</QUERY>" .
+              "</REQUEST>";
 
       // Open up curl session and fire of the request
       $session = curl_init();
@@ -307,11 +318,16 @@ class Tufftufftime {
 
       // Check if we got a response
       if(!$response) :
-        throw new \Exception("Could not get stations");
-			endif;
+        throw new \Exception("Could not get departing");
+  		endif;
 
-      return json_decode($response, true);
-    }
+      $departing = json_decode( $response, true );
+
+		  set_transient( $transient_id, $departing, 20 * MINUTE_IN_SECONDS );
+		}
+
+    return $departing;
+  }
 
 	/**
     * Retrives the stations from the api
@@ -320,30 +336,36 @@ class Tufftufftime {
     * @return json-array
   */
   public function load_stations( $tufftufftime_options ) {
+    $transient_id = '_tufftufftime_stations';
 
-    $xml = "<REQUEST>" .
-              "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
-              "<QUERY objecttype='TrainStation'>" .
-              	"<FILTER/>" .
-              	"<INCLUDE>AdvertisedLocationName</INCLUDE>" .
-                "<INCLUDE>LocationSignature</INCLUDE>" .
-              "</QUERY>" .
-            "</REQUEST>";
+    if ( false === ( $stations = get_transient( $transient_id ) ) ) {
+      $xml = "<REQUEST>" .
+                "<LOGIN authenticationkey='" . $tufftufftime_options['tufftufftime_api_key'] . "' />" .
+                "<QUERY objecttype='TrainStation'>" .
+                 "<FILTER/>" .
+                 "<INCLUDE>AdvertisedLocationName</INCLUDE>" .
+                  "<INCLUDE>LocationSignature</INCLUDE>" .
+                "</QUERY>" .
+              "</REQUEST>";
 
-    // Open up curl session and fire of the request
-    $session = curl_init();
-    curl_setopt_array( $session, self::$options );
-    curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
-    $response = curl_exec( $session );
-    curl_close( $session );
+      // Open up curl session and fire of the request
+      $session = curl_init();
+      curl_setopt_array( $session, self::$options );
+      curl_setopt( $session, CURLOPT_POSTFIELDS, "$xml" );
+      $response = curl_exec( $session );
+      curl_close( $session );
 
-    // Check if we got a response
-    if ( !$response ) :
-      throw new \Exception("Could not get stations");
-		endif;
+      // Check if we got a response
+      if ( !$response ) :
+        throw new \Exception("Could not get stations");
+      endif;
 
+      $stations = json_decode( $response, true );
 
-    return json_decode( $response, true );
+		  set_transient( $transient_id, $stations, WEEK_IN_SECONDS );
+		}
+
+    return $stations;
   }
 
   /**
