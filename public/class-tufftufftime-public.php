@@ -25,7 +25,7 @@ class TuffTuffTime_Public extends TuffTuffTime {
 	/**
 	 * The ID of this plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @access   protected
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
@@ -34,7 +34,7 @@ class TuffTuffTime_Public extends TuffTuffTime {
 	/**
 	 * The version of this plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @access   protected
 	 * @var      string    $version    The current version of this plugin.
 	 */
@@ -43,7 +43,7 @@ class TuffTuffTime_Public extends TuffTuffTime {
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
@@ -58,7 +58,7 @@ class TuffTuffTime_Public extends TuffTuffTime {
 	 * Display the shortcode.
    * Ex: [tufftufftime station="Stockholm Central" limit="5" type="arriving"]
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 */
 	public function display_simple_timetable( $attributes ) {
 

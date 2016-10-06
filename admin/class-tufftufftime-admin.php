@@ -14,7 +14,7 @@ class TuffTuffTime_Admin {
 	/**
 	 * The ID of this plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @access   private
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
@@ -23,7 +23,7 @@ class TuffTuffTime_Admin {
 	/**
 	 * The version of this plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @access   private
 	 * @var      string    $version    The current version of this plugin.
 	 */
@@ -32,7 +32,7 @@ class TuffTuffTime_Admin {
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 * @param    string    $plugin_name       The name of this plugin.
 	 * @param    string    $version    The version of this plugin.
 	 */
@@ -46,7 +46,7 @@ class TuffTuffTime_Admin {
   /**
 	 * Register the settings fields that are used.
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 */
 	public function register_settings() {
 
@@ -71,7 +71,7 @@ class TuffTuffTime_Admin {
   /**
 	 * Callback function for add_settings_section for TuffTuffTime
 	 *
-	 * @since    1.0.0
+	 * @since    2.0.0
 	 */
   public function create_settings_section( $arg ) {
 
@@ -83,7 +83,7 @@ class TuffTuffTime_Admin {
   /**
    * Generic callback function for add_settings_field to create textboxes
    *
-   * @since    1.0.0
+   * @since    2.0.0
    */
 	public function create_textbox( $args ) {
 
