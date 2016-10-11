@@ -175,6 +175,7 @@ class TuffTuffTime {
 
 		$plugin_admin = new TuffTuffTime_Admin( $this->get_plugin_name(), $this->get_version() );
 
+    $this->loader->add_action( 'admin_menu', $plugin_admin, 'create_options_page' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 
 	}

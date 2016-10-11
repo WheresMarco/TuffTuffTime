@@ -51,15 +51,22 @@ class TuffTuffTime_Admin {
 	public function register_settings() {
 
 		// Register and create settings section for the plugin
-    register_setting('TuffTuffTime', 'tufftufftime_options');
-    add_settings_section( 'tufftufftime_options', '', array( $this, 'create_settings_section' ), 'general' );
+    register_setting('tufftufftime', 'tufftufftime_options');
+    add_settings_section(
+      'tufftufftime_options',
+      null,
+      function() {
+        echo '<p>' . __( 'You have to register an account at <a href="https://www.trafiklab.se/" target="_blank">Trafiklab</a> and create an application that uses <a href="https://www.trafiklab.se/api/trafikverket-oppet-api" target="_blank">Trafikverkets Open API</a> to use TuffTuffTime. You should then be able to create an API-key that can be used with this plugin.', 'TuffTuffTime' ) . '</p>';
+      },
+      'tufftufftime'
+    );
 
 		// Add settings field for API Key
 		add_settings_field(
-		  'api_key',
+		  'tufftufftime_api_key',
 		  __( 'Trafiklab API-key', 'TuffTuffTime' ),
 			array( $this, 'create_textbox' ),
-		  'general',
+		  'tufftufftime',
 		  'tufftufftime_options',
 			[
 	    	'label_for' => 'tufftufftime_api_key',
@@ -67,18 +74,6 @@ class TuffTuffTime_Admin {
 		);
 
 	}
-
-  /**
-	 * Callback function for add_settings_section for TuffTuffTime
-	 *
-	 * @since    2.0.0
-	 */
-  public function create_settings_section( $arg ) {
-
-  	echo '<h2 class="title">' . $this->plugin_name . '</h2>';
-    echo '<p>' . __( 'You have to register an account at <a href="https://www.trafiklab.se/" target="_blank">Trafiklab</a> and create an application that uses <a href="https://www.trafiklab.se/api/trafikverket-oppet-api" target="_blank">Trafikverkets Open API</a> to use TuffTuffTime. You should then be able to create an API-key that can be used with this plugin.', 'TuffTuffTime' ) . '</p>';
-
-  }
 
   /**
    * Generic callback function for add_settings_field to create textboxes
@@ -97,6 +92,28 @@ class TuffTuffTime_Admin {
         class="regular-text code" />
 		<?php
 
+	}
+
+  /**
+	 * Create the options page.
+	 *
+	 * @since    2.0.0
+	 */
+	public function create_options_page() {
+		add_submenu_page(
+			'options-general.php',
+			'TuffTuffTime',
+			'TuffTuffTime',
+			'manage_options',
+			'tufftufftime',
+			function() {
+				if ( !current_user_can('manage_options') ) :
+		      return;
+		    endif;
+        
+				include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-admin-options.php' );
+			}
+		);
 	}
 
 }
