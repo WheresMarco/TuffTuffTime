@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -110,7 +109,12 @@ class TuffTuffTime_Admin {
 				if ( !current_user_can('manage_options') ) :
 		      return;
 		    endif;
-        
+
+        // Get the stations and loop them in the options page
+        $tuffTuffTime = new TuffTuffTime;
+        $TuffTuffTime_options = get_option('TuffTuffTime_options');
+    		$stations = $tuffTuffTime->load_stations( $TuffTuffTime_options );
+
 				include( plugin_dir_path( __FILE__ ) . 'partials/tufftufftime-admin-options.php' );
 			}
 		);

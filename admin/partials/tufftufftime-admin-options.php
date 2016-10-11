@@ -24,6 +24,26 @@
 
       // output save settings button
       submit_button('Save Settings');
+
+      echo '<h2>' . __( 'All stations', 'TuffTuffTime' ) . '</h2>';
+      echo '<p>' . __( 'To make it easier then to just guess how to spell a station we made a list with every one in the Trafikverket API. The spelling must be exactly the same as in in the list.<br /><i>Hint: Use the browsers built in search to filter the list (CMD + F, CTRL + F).</i>', 'TuffTuffTime' ) . '</p>';
+      echo '<table class="wp-list-table widefat fixed striped">';
+        echo '<thead>';
+        echo '<tr>';
+          echo '<td>Stationsnamn</td>';
+          echo '<td>Förkortning</td>';
+        echo '</tr>';
+        echo '</thead>';
+
+        echo '<tbody>';
+          foreach($stations['RESPONSE']['RESULT']['0']['TrainStation'] as $station) :
+            echo '<tr>';
+              echo '<td>' . $station['AdvertisedLocationName'] . '</td>';
+              echo '<td>' . $station['LocationSignature'] . '</td>';
+            echo '</tr>';
+          endforeach;
+        echo '</tbody>';
+      echo '</table>';
       ?>
   </form>
 </div>
