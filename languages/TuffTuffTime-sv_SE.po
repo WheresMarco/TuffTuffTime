@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TuffTuffTime\n"
-"POT-Creation-Date: 2016-10-11 21:23+0200\n"
-"PO-Revision-Date: 2016-10-11 21:25+0200\n"
+"POT-Creation-Date: 2016-10-12 09:56+0200\n"
+"PO-Revision-Date: 2016-10-12 09:56+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
-"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
@@ -31,8 +31,8 @@ msgstr ""
 "Du måste registrera ett konto på <a href=\"https://www.trafiklab.se/\" "
 "target=\"_blank\">Trafiklab</a> och skapa en applikation som använder <a "
 "href=\"https://www.trafiklab.se/api/trafikverket-oppet-api\" target=\"_blank"
-"\">Trafikverkets öppna API</a> för att kunna använda TuffTuffTime. Du bör "
-"då kunna generera en API-nyckel som kan användas med tillägget."
+"\">Trafikverkets öppna API</a> för att kunna använda TuffTuffTime. Du bör då "
+"kunna generera en API-nyckel som kan användas med tillägget."
 
 #: admin/class-tufftufftime-admin.php:66
 msgid "Trafiklab API-key"
@@ -53,6 +53,14 @@ msgstr ""
 "med alla i Trafikverkets API. Stavningen måste vara densamma som i listan."
 "<br /><i>Tips: Använd webbläsarens inbyggda sök för att filtrera i listan "
 "(CMD + F, CTRL + F).</i>"
+
+#: admin/partials/tufftufftime-admin-options.php:33
+msgid "Station name"
+msgstr "Stationsnamn"
+
+#: admin/partials/tufftufftime-admin-options.php:34
+msgid "Abbreviation"
+msgstr "Förkortning"
 
 #: public/partials/tufftufftime-public-simple-timetable.php:18
 msgid "Arriving"

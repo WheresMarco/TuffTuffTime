@@ -30,8 +30,8 @@
       echo '<table class="wp-list-table widefat fixed striped">';
         echo '<thead>';
         echo '<tr>';
-          echo '<td>Stationsnamn</td>';
-          echo '<td>Förkortning</td>';
+          echo '<td>' . __( 'Station name', 'TuffTuffTime' ) . '</td>';
+          echo '<td>' . __( 'Abbreviation', 'TuffTuffTime' ) . '</td>';
         echo '</tr>';
         echo '</thead>';
 
